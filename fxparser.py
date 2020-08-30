@@ -16,7 +16,7 @@ def parseRate():
     r=requests.get('https://finance.yahoo.com/quote/USDTRY=X/')
     soup = bs4.BeautifulSoup(r.text,"lxml")
     price = soup.find("span",{'class':'Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)'}).text
-    kur = price + "|" #this is basically the stop sign for Arduino serial
+    kur = price + " " #this is basically the stop sign for Arduino serial
     return kur
 
 def tellBoard():
