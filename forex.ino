@@ -9,31 +9,29 @@
 // pin 4 - LCD chip select (CS)
 // pin 3 - LCD reset (RST)
 Adafruit_PCD8544 display = Adafruit_PCD8544(7, 6, 5, 4, 3);
-const int red = 8; // choose the pin for each of the LEDs
+
+const int red = 8; // choose pin for each LED
 const int yellow = 9;
 const int green = 10;
 
-// initialize the library with the numbers of the interface pins
-
 String str = "";
-float kurp = 0.0;
-float kurn = 0.0;
+float kurp = 0.0; //previous value
+float kurn = 0.0; //next value
 
 
 void setup() {
 
-  // Print a message to the LCD.
   pinMode(red, OUTPUT);
   pinMode(yellow, OUTPUT); 
   pinMode(green, OUTPUT); 
 
   Serial.begin(9600);
-  
+
   display.begin();
-  display.setContrast(50); //yeni ekranda düşürdük 
+  display.setContrast(50); //change this if there are problems w display
   display.clearDisplay();   
-  
-  display.drawRect(0, 0, 83, 47, 1); //çerçeve çizdir
+
+  display.drawRect(0, 0, 83, 47, 1); //draw border
   display.fillRect(1,1,83,47,0);
   display.drawRect(1,1,83,47,1);
   display.setTextSize(1);
@@ -47,15 +45,15 @@ void setup() {
 
 void loop() {
   if (Serial.available()>0){
-    
+
     str = Serial.readStringUntil(' ');
     str.trim();
     kurn = str.toFloat();
-    display.fillRect(4,23,70,15,0);
+    display.fillRect(4,23,70,15,0); //erase previous value
     display.setCursor(4,23);
-    display.println(kurn);
+    display.println(kurn,4);
     display.display();
-    
+
     if (kurn == kurp) {
       digitalWrite(red, LOW);
       digitalWrite(yellow, HIGH);
@@ -76,11 +74,9 @@ void loop() {
       digitalWrite(yellow, HIGH);
       digitalWrite(green, HIGH);
     }
-    kurp = kurn;
-    delay(5000);
-    
+    kurp = kurn; //update previous value and move on
+    delay(5000); 
+
 }
 
-  
-                  
 }
